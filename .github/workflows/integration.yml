@@ -57,9 +57,20 @@ jobs:
         with:
           filename: next-build.zip
       - name: Create Release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         with:
           tag_name: ${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
+      - name: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./next-build.zip
+          asset_name: next-build-v${{ github.run_number }}.zip
+          asset_content_type: application/zip 
+
