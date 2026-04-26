@@ -49,4 +49,9 @@ jobs:
         with:
           name: next-build
       - name: Display structure of downloaded files
-        run: ls -R
+        run: ls -R 
+      - name: Archive Release
+        uses: thedoctor0/zip-release@0.7.5
+        with:
+          filename: next-build.zip
+    
