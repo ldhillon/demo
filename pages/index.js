@@ -1,12 +1,12 @@
-require("linqjs")
-import { v4 as uuidv4 } from 'uuid';
-import Link from 'next/link'
+import "linqjs";
+import { v4 as uuidv4 } from "uuid";
+import Link from "next/link";
 import Layout from "../components/layout";
 import Jumbotron from "../components/jumbotron";
 import Board from "../components/board";
-import Locations from "./data.json"
+import Locations from "./data.json";
 
-const Index = ({ locationGroups }) =>
+const Index = ({ locationGroups }) => (
     <Layout>
         <Jumbotron />
         <section className="container">
@@ -16,7 +16,8 @@ const Index = ({ locationGroups }) =>
                         Featured Locations
                     </h5>
                 </div>
-            </div> 
+            </div>
+
             {locationGroups.map((group) => (
                 <div className="card-group" key={group.id}>
                     {group.locations.map((location) => (
@@ -27,50 +28,54 @@ const Index = ({ locationGroups }) =>
                 </div>
             ))}
         </section>
-    </Layout>;
+    </Layout>
+);
 
-const getLocation = (location) =>
+const getLocation = (location) => (
     <div className="card-body">
-        <h5 className="card-title text-center">
-            {location.name}
-        </h5>
+        <h5 className="card-title text-center">{location.name}</h5>
+
         <div className="card-text my-2">
             <Board location={location} />
         </div>
-        <p className="card-text">
-            <small className="text-muted">
-                {location.mailingAddress}
-            </small>
-        </p>
-        <Link href="/locations/[id]" as={`/locations/${location.id}`}>
-            <a className="btn btn-secondary">
-                Learn more
-            </a>
-        </Link>
-    </div>;  
 
-export const getStaticProps = async (context) =>
-{
-    var items = [...Locations]
-        .orderBy(l => l.lastRenovationDate)
+        <p className="card-text">
+            <small className="text-muted">{location.mailingAddress}</small>
+        </p>
+
+        <Link
+            href={`/locations/${location.id}`}
+            className="btn btn-secondary"
+        >
+            Learn more
+        </Link>
+    </div>
+);
+
+export const getStaticProps = async () => {
+    const items = [...Locations]
+        .orderBy((l) => l.lastRenovationDate)
         .reverse()
         .take(4);
+
     return {
         props: {
-            locationGroups: chunkArray(items, 2)
-        }
+            locationGroups: chunkArray(items, 2),
+        },
     };
-}
+};
 
 const chunkArray = (items, size) => {
-    var results = [];
-    while(items.length) {
+    const results = [];
+
+    for (let i = 0; i < items.length; i += size) {
         results.push({
             id: uuidv4(),
-            locations: items.splice(0, 2)
+            locations: items.slice(i, i + size),
         });
     }
-    return results;
-}
 
-export default Index
+    return results;
+};
+
+export default Index;
