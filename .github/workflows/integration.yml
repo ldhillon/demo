@@ -48,10 +48,23 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: next-build
-      - name: Display structure of downloaded files
-        run: ls -R 
+      # - name: Display structure of downloaded files
+      #   run: ls -R 
       - name: Archive Release
         uses: thedoctor0/zip-release@0.7.5
         with:
           filename: next-build.zip
-    
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
