@@ -33,8 +33,20 @@ jobs:
         run: ls -la .next
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: next-build
           path: .next
           include-hidden-files: true
+
+  release-project:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: next-build
+      - name: Display structure of downloaded files
+        run: ls -R
