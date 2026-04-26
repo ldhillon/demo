@@ -2,6 +2,8 @@ name: Build node.js web application
 
 on:
   push:
+permissions:
+  contents: write
 
 jobs:
   build:
