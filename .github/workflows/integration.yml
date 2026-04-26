@@ -37,3 +37,4 @@ jobs:
         with:
           name: next-build
           path: .next
+          include-hidden-files: true
